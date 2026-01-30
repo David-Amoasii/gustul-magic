@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vizitka - Denis Amoaşii | Gustul Magic</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --dark: #232A56;
+            --light: #F5F0E6;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f0f0f0;
+            min-height: 100vh;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+        }
+
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--dark);
+            font-size: 20px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .instructions {
+            background: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            color: #666;
+            font-size: 13px;
+        }
+
+        .cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 60px;
+            justify-content: center;
+        }
+
+        .card-wrapper {
+            text-align: center;
+        }
+
+        .card-label {
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #999;
+            margin-bottom: 12px;
+        }
+
+        .business-card {
+            /* 85mm x 55mm при 96 DPI */
+            width: 321px;
+            height: 208px;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        /* === ЛИЦЕВАЯ СТОРОНА === */
+        .card-front {
+            background: var(--dark);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 12px;
+        }
+
+        .logo {
+            width: 165px;
+            height: 165px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* === ОБОРОТНАЯ СТОРОНА === */
+        .card-back {
+            background: var(--dark);
+            height: 100%;
+            display: flex;
+            padding: 18px 18px 28px 18px;
+            gap: 15px;
+            position: relative;
+        }
+
+        .back-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .phone-block {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .phone-icon {
+            width: 30px;
+            height: 30px;
+            background: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .phone-icon svg {
+            width: 16px;
+            height: 16px;
+            fill: var(--dark);
+        }
+
+        .phone-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .phone-number {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--white);
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        .messengers {
+            font-size: 9px;
+            color: rgba(255,255,255,0.6);
+            margin-top: 3px;
+        }
+
+        .back-name {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--white);
+            letter-spacing: 0.5px;
+        }
+
+        .website {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 10px;
+            color: rgba(255,255,255,0.7);
+            font-weight: 500;
+        }
+
+        .qr-block {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding-right: 8px;
+        }
+
+        #qrcode {
+            width: 80px;
+            height: 80px;
+        }
+
+        #qrcode img,
+        #qrcode canvas {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        .qr-label {
+            font-size: 8px;
+            color: rgba(255,255,255,0.6);
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* === ПЕЧАТЬ === */
+        @media print {
+            @page { size: A4; margin: 15mm; }
+            body { background: white; padding: 0; }
+            h1, .instructions, .card-label { display: none; }
+
+            .business-card {
+                width: 85mm;
+                height: 55mm;
+                border-radius: 1.5mm;
+                box-shadow: none;
+                border: 0.1mm solid #ddd;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .cards-container { gap: 10mm; }
+
+            .card-front { padding: 3mm; }
+            .logo { width: 45mm; height: 45mm; }
+
+            .card-back { padding: 5mm 5mm 8mm 5mm; gap: 4mm; }
+            .back-info { gap: 3mm; }
+            .phone-block { gap: 3mm; }
+            .phone-icon { width: 8mm; height: 8mm; }
+            .phone-icon svg { width: 4mm; height: 4mm; }
+            .phone-number { font-size: 4.5mm; letter-spacing: 0.3mm; }
+            .messengers { font-size: 2.2mm; margin-top: 1mm; }
+            .back-name { font-size: 5mm; letter-spacing: 0.3mm; }
+            .website { bottom: 3mm; font-size: 2.5mm; }
+            .qr-block { padding-right: 2mm; }
+            #qrcode { width: 22mm; height: 22mm; }
+            .qr-label { font-size: 2mm; margin-top: 1.5mm; }
+        }
+    </style>
+</head>
+<body>
+    <h1>Vizitka</h1>
+
+    <div class="instructions">
+        Ctrl+P → Salvați ca PDF | 85 × 55 mm
+    </div>
+
+    <div class="cards-container">
+        <!-- Front -->
+        <div class="card-wrapper">
+            <div class="card-label">Front</div>
+            <div class="business-card card-front">
+                <img src="../logo.jpg" alt="Logo" class="logo">
+            </div>
+        </div>
+
+        <!-- Back -->
+        <div class="card-wrapper">
+            <div class="card-label">Back</div>
+            <div class="business-card card-back">
+                <div class="back-info">
+                    <div class="back-name">Denis Amoaşii</div>
+                    <div class="phone-block">
+                        <div class="phone-icon">
+                            <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+                        </div>
+                        <div class="phone-content">
+                            <span class="phone-number">067 353 885</span>
+                            <div class="messengers">Telegram · WhatsApp · Viber</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="qr-block">
+                    <div id="qrcode"></div>
+                    <div class="qr-label">catalog</div>
+                </div>
+                <div class="website">denis.amoasii.md</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            new QRCode(document.getElementById("qrcode"), {
+                text: "https://denis.amoasii.md",
+                width: 150,
+                height: 150,
+                colorDark: "#232A56",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        });
+    </script>
+</body>
+</html>
