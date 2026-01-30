@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Denis Amoaşii - Gustul Magic</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #1a2332 0%, #303D5C 50%, #3d4d6e 100%);
+            color: #F5F0E6;
+            min-height: 100vh;
+            line-height: 1.6;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Декоративный фон */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(245,240,230,0.03) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -50%;
+            left: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(245,240,230,0.02) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Language Switcher */
+        .lang-switcher {
+            display: flex;
+            justify-content: flex-end;
+            gap: 5px;
+            margin-bottom: 30px;
+        }
+
+        .lang-btn {
+            background: rgba(245, 240, 230, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(245, 240, 230, 0.2);
+            color: #F5F0E6;
+            padding: 8px 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .lang-btn:hover {
+            background: rgba(245, 240, 230, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .lang-btn.active {
+            background: linear-gradient(135deg, #F5F0E6 0%, #e8e0d0 100%);
+            color: #303D5C;
+            box-shadow: 0 4px 15px rgba(245, 240, 230, 0.3);
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo-wrapper {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 25px;
+        }
+
+        .logo-wrapper::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            right: -8px;
+            bottom: -8px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(245,240,230,0.3), rgba(245,240,230,0.05));
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.7; }
+        }
+
+        .logo {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #F5F0E6;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .name {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #F5F0E6 0%, #d4cfc0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .position {
+            font-size: 1rem;
+            opacity: 0.8;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        /* Phone Number Display */
+        .phone-display {
+            margin-top: 20px;
+            padding: 15px 25px;
+            background: rgba(245, 240, 230, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            display: inline-block;
+            border: 1px solid rgba(245, 240, 230, 0.15);
+        }
+
+        .phone-display a {
+            color: #F5F0E6;
+            text-decoration: none;
+            font-size: 1.4rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .phone-display a:hover {
+            text-shadow: 0 0 20px rgba(245, 240, 230, 0.5);
+        }
+
+        /* Sections */
+        .section {
+            margin-bottom: 35px;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            text-align: center;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            opacity: 0.9;
+        }
+
+        /* Contact Buttons */
+        .contact-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .contact-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 70px;
+            height: 70px;
+            border-radius: 20px;
+            text-decoration: none;
+            color: #fff;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .contact-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        .contact-btn svg {
+            width: 32px;
+            height: 32px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-btn.whatsapp {
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            box-shadow: 0 5px 20px rgba(37, 211, 102, 0.3);
+        }
+
+        .contact-btn.telegram {
+            background: linear-gradient(135deg, #2AABEE 0%, #0088cc 100%);
+            box-shadow: 0 5px 20px rgba(0, 136, 204, 0.3);
+        }
+
+        .contact-btn.viber {
+            background: linear-gradient(135deg, #9b7dff 0%, #7360f2 100%);
+            box-shadow: 0 5px 20px rgba(115, 96, 242, 0.3);
+        }
+
+        /* Catalog */
+        .catalog-wrapper {
+            background: rgba(245, 240, 230, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 15px;
+            border: 1px solid rgba(245, 240, 230, 0.1);
+        }
+
+        .pdf-container {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .pdf-canvas-wrapper {
+            width: 100%;
+            aspect-ratio: 210 / 297;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f5f5f5;
+            cursor: pointer;
+        }
+
+        .pdf-canvas {
+            max-width: 100%;
+            max-height: 100%;
+            display: block;
+        }
+
+        .pdf-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            padding: 12px;
+            background: rgba(48, 61, 92, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .pdf-nav-btn {
+            background: rgba(245, 240, 230, 0.15);
+            border: 1px solid rgba(245, 240, 230, 0.25);
+            color: #F5F0E6;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .pdf-nav-btn:hover:not(:disabled) {
+            background: rgba(245, 240, 230, 0.25);
+            transform: scale(1.1);
+        }
+
+        .pdf-nav-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .pdf-nav-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .pdf-page-indicator {
+            color: #F5F0E6;
+            font-size: 14px;
+            font-weight: 600;
+            min-width: 70px;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        .fullscreen-btn {
+            background: rgba(245, 240, 230, 0.15);
+            border: 1px solid rgba(245, 240, 230, 0.25);
+            color: #F5F0E6;
+            padding: 10px 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .fullscreen-btn:hover {
+            background: rgba(245, 240, 230, 0.25);
+            transform: scale(1.05);
+        }
+
+        .fullscreen-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* PDF Modal */
+        .pdf-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .pdf-modal.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 10px;
+        }
+
+        .close-btn {
+            background: rgba(245, 240, 230, 0.1);
+            border: 1px solid rgba(245, 240, 230, 0.2);
+            color: #F5F0E6;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: rgba(245, 240, 230, 0.2);
+        }
+
+        .close-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .modal-pdf {
+            flex: 1;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            background: #303D5C;
+        }
+
+        .modal-canvas-wrapper {
+            flex: 1;
+            overflow: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #2a3548;
+            padding: 20px;
+        }
+
+        .modal-canvas {
+            max-width: 100%;
+            max-height: 100%;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            padding: 15px;
+            background: rgba(48, 61, 92, 0.98);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            opacity: 0.5;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .name {
+                font-size: 1.8rem;
+            }
+
+            .phone-display a {
+                font-size: 1.2rem;
+            }
+
+            .contact-btn {
+                width: 65px;
+                height: 65px;
+            }
+
+            .pdf-canvas-wrapper {
+                aspect-ratio: 210 / 297;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Language Switcher -->
+        <div class="lang-switcher">
+            <button class="lang-btn active" data-lang="ro">RO</button>
+            <button class="lang-btn" data-lang="ru">RU</button>
+        </div>
+
+        <!-- Header -->
+        <header class="header">
+            <div class="logo-wrapper">
+                <img src="logo.jpg" alt="Gustul Magic" class="logo">
+            </div>
+            <h1 class="name">Denis Amoaşii</h1>
+            <p class="position" data-ro="Agent de vânzări" data-ru="Агент по продажам">Agent de vânzări</p>
+            <div class="phone-display">
+                <a href="tel:+37367353885">+373 67 353 885</a>
+            </div>
+        </header>
+
+        <!-- Contacts -->
+        <section class="section">
+            <h2 class="section-title" data-ro="Contacte" data-ru="Контакты">Contacte</h2>
+            <div class="contact-buttons">
+                <a href="https://wa.me/37367353885" class="contact-btn whatsapp" target="_blank" title="WhatsApp">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                    </svg>
+                </a>
+                <a href="https://t.me/+37367353885" class="contact-btn telegram" target="_blank" title="Telegram">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                    </svg>
+                </a>
+                <a href="viber://chat?number=+37367353885" class="contact-btn viber" title="Viber">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M11.398.002C9.473.028 5.331.344 3.014 2.467 1.294 4.182.518 6.77.434 9.983c-.084 3.213-.19 9.24 5.655 10.914l.004.003-.003 2.51s-.04.997.63 1.202c.79.244 1.228-.521 1.945-1.315.393-.434.928-1.074 1.335-1.566 3.674.323 6.503-.396 6.826-.497.746-.234 4.967-.784 5.656-6.39.712-5.79-.333-9.447-2.162-11.103l-.002-.001c-.55-.546-2.727-2.05-7.558-2.16 0 0-.374-.02-.962-.014zm.09 1.773c.478-.004.79.013.79.013 4.012.092 5.87 1.267 6.324 1.707l.002.001c1.469 1.332 2.258 4.59 1.655 9.506-.562 4.553-3.945 4.89-4.555 5.082-.267.083-2.648.673-5.64.478 0 0-2.236 2.7-2.934 3.402-.109.11-.24.147-.326.127-.121-.028-.155-.147-.153-.326l.02-3.688-.001-.004c-4.892-1.4-4.604-6.657-4.536-9.313.069-2.658.676-4.804 2.103-6.217 1.95-1.774 5.437-2.16 7.251-2.168zm.18 2.403c-.157 0-.286.128-.283.287 0 .158.128.285.286.285 1.086.006 2.108.425 2.878 1.18a4.066 4.066 0 0 1 1.211 2.848c0 .158.127.287.284.287h.004a.287.287 0 0 0 .283-.29c-.004-1.188-.468-2.305-1.308-3.144-.852-.854-1.985-1.33-3.191-1.338a.292.292 0 0 0-.164.085zm-3.242.386a.66.66 0 0 0-.366.096c-.312.191-.612.404-.893.64a2.399 2.399 0 0 0-.472.512c-.169.25-.25.531-.25.813.006.242.06.483.162.708.224.5.522.964.883 1.381.093.113.188.225.287.334l.005.006.006.005c.281.312.584.605.91.874l.006.005c.699.58 1.476 1.049 2.32 1.41l.026.01a9.62 9.62 0 0 0 1.064.393c.265.08.536.13.809.149h.072c.216 0 .469-.057.666-.194a2.077 2.077 0 0 0 .515-.478c.139-.2.273-.41.389-.63.125-.237.13-.484.01-.673-.198-.31-.473-.56-.76-.803l-.101-.08c-.2-.157-.4-.312-.61-.45a.873.873 0 0 0-.503-.152.88.88 0 0 0-.584.234c-.093.085-.18.176-.264.27l-.147.167c-.087.1-.172.14-.246.14a.456.456 0 0 1-.166-.039 4.543 4.543 0 0 1-.652-.372 6.009 6.009 0 0 1-1.244-1.076 4.987 4.987 0 0 1-.467-.63 1.348 1.348 0 0 1-.08-.15.276.276 0 0 1 .035-.28l.005-.005c.103-.12.212-.234.316-.354l.094-.106c.18-.205.263-.424.244-.649a.869.869 0 0 0-.308-.554c-.096-.11-.249-.269-.409-.434l-.206-.213c-.198-.207-.4-.418-.609-.617a.878.878 0 0 0-.596-.243zm3.846.378c-.16 0-.29.126-.29.283 0 .158.127.286.285.29.562.004 1.09.226 1.487.624.397.398.62.924.625 1.483.003.157.131.283.287.283h.004a.286.286 0 0 0 .283-.29 2.677 2.677 0 0 0-.79-1.876 2.678 2.678 0 0 0-1.891-.782v-.015zm.487 1.03c-.155 0-.283.126-.284.281-.002.158.124.287.282.29.275.004.502.113.679.294.177.182.28.406.289.69v.003c.006.158.132.283.288.282a.286.286 0 0 0 .282-.295 1.71 1.71 0 0 0-.482-1.13 1.657 1.657 0 0 0-1.054-.5v-.015z"/>
+                    </svg>
+                </a>
+            </div>
+        </section>
+
+        <!-- Catalog -->
+        <section class="section">
+            <h2 class="section-title" data-ro="Catalog" data-ru="Каталог">Catalog</h2>
+            <div class="catalog-wrapper">
+                <div class="pdf-container">
+                    <div class="pdf-canvas-wrapper" onclick="openFullscreen()">
+                        <canvas id="pdfCanvas" class="pdf-canvas"></canvas>
+                    </div>
+                    <div class="pdf-controls">
+                        <button class="pdf-nav-btn" id="prevBtn" onclick="prevPage()" disabled>
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                            </svg>
+                        </button>
+                        <span class="pdf-page-indicator" id="pageIndicator">1 / 1</span>
+                        <button class="pdf-nav-btn" id="nextBtn" onclick="nextPage()">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                            </svg>
+                        </button>
+                        <button class="fullscreen-btn" onclick="openFullscreen()">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+                            </svg>
+                            <span data-ro="Deschide" data-ru="Открыть">Deschide</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Gustul Magic &copy; 2026</p>
+        </footer>
+    </div>
+
+    <!-- PDF Modal -->
+    <div class="pdf-modal" id="pdfModal">
+        <div class="modal-header">
+            <button class="close-btn" onclick="closeFullscreen()">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                </svg>
+                <span data-ro="Închide" data-ru="Закрыть">Închide</span>
+            </button>
+        </div>
+        <div class="modal-pdf">
+            <div class="modal-canvas-wrapper" id="modalCanvasWrapper">
+                <canvas id="modalPdfCanvas" class="modal-canvas"></canvas>
+            </div>
+            <div class="modal-controls">
+                <button class="pdf-nav-btn" id="modalPrevBtn" onclick="prevPage()">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                    </svg>
+                </button>
+                <span class="pdf-page-indicator" id="modalPageIndicator">1 / 1</span>
+                <button class="pdf-nav-btn" id="modalNextBtn" onclick="nextPage()">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Language switching functionality
+        const langButtons = document.querySelectorAll('.lang-btn');
+        const translatableElements = document.querySelectorAll('[data-ro][data-ru]');
+
+        function setLanguage(lang) {
+            langButtons.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === lang);
+            });
+
+            translatableElements.forEach(el => {
+                el.textContent = el.dataset[lang];
+            });
+
+            document.documentElement.lang = lang;
+            localStorage.setItem('preferred-language', lang);
+        }
+
+        langButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                setLanguage(btn.dataset.lang);
+            });
+        });
+
+        const savedLang = localStorage.getItem('preferred-language') || 'ro';
+        setLanguage(savedLang);
+
+        // PDF.js Configuration
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+        // PDF Viewer State
+        let pdfDoc = null;
+        let currentPage = 1;
+        let totalPages = 0;
+        let isModalOpen = false;
+
+        // Canvas elements
+        const canvas = document.getElementById('pdfCanvas');
+        const ctx = canvas.getContext('2d');
+        const modalCanvas = document.getElementById('modalPdfCanvas');
+        const modalCtx = modalCanvas.getContext('2d');
+
+        // Control elements
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const pageIndicator = document.getElementById('pageIndicator');
+        const modalPrevBtn = document.getElementById('modalPrevBtn');
+        const modalNextBtn = document.getElementById('modalNextBtn');
+        const modalPageIndicator = document.getElementById('modalPageIndicator');
+
+        // Load PDF
+        async function loadPDF() {
+            try {
+                pdfDoc = await pdfjsLib.getDocument('catalog.pdf').promise;
+                totalPages = pdfDoc.numPages;
+                updatePageControls();
+                renderPage(currentPage);
+            } catch (error) {
+                console.error('Error loading PDF:', error);
+                // Fallback to embed for local file:// protocol
+                useFallbackViewer();
+            }
+        }
+
+        // Fallback viewer using embed (for local file:// access)
+        function useFallbackViewer() {
+            const wrapper = canvas.parentElement;
+            wrapper.innerHTML = '<embed src="catalog.pdf" type="application/pdf" style="width:100%;height:100%;border:none;">';
+            wrapper.onclick = null;
+
+            // Hide navigation buttons (not available in fallback mode)
+            document.querySelector('.pdf-controls').innerHTML = `
+                <span class="pdf-page-indicator" style="opacity: 0.7;">Utilizați controalele PDF încorporate</span>
+                <button class="fullscreen-btn" onclick="openFullscreen()">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>
+                    </svg>
+                    <span data-ro="Deschide" data-ru="Открыть">Deschide</span>
+                </button>
+            `;
+
+            // Update modal to use embed too
+            document.getElementById('modalCanvasWrapper').innerHTML = '<embed src="catalog.pdf" type="application/pdf" style="width:100%;height:100%;border:none;">';
+            document.querySelector('.modal-controls').style.display = 'none';
+
+            // Re-apply language
+            const savedLang = localStorage.getItem('preferred-language') || 'ro';
+            setLanguage(savedLang);
+        }
+
+        // Render page to canvas
+        async function renderPage(pageNum) {
+            if (!pdfDoc) return;
+
+            const page = await pdfDoc.getPage(pageNum);
+
+            // Render to main canvas
+            const containerWidth = canvas.parentElement.clientWidth;
+            const containerHeight = canvas.parentElement.clientHeight;
+            const viewport = page.getViewport({ scale: 1 });
+
+            // Calculate scale to fit container
+            const scaleX = containerWidth / viewport.width;
+            const scaleY = containerHeight / viewport.height;
+            const scale = Math.min(scaleX, scaleY) * 0.95;
+
+            const scaledViewport = page.getViewport({ scale });
+
+            canvas.width = scaledViewport.width;
+            canvas.height = scaledViewport.height;
+
+            await page.render({
+                canvasContext: ctx,
+                viewport: scaledViewport
+            }).promise;
+
+            // Render to modal canvas if open
+            if (isModalOpen) {
+                renderModalPage(page);
+            }
+
+            updatePageControls();
+        }
+
+        // Render page to modal canvas
+        async function renderModalPage(page) {
+            if (!page) {
+                page = await pdfDoc.getPage(currentPage);
+            }
+
+            const modalWrapper = document.getElementById('modalCanvasWrapper');
+            const containerWidth = modalWrapper.clientWidth - 40;
+            const containerHeight = modalWrapper.clientHeight - 40;
+            const viewport = page.getViewport({ scale: 1 });
+
+            // Calculate scale for larger view
+            const scaleX = containerWidth / viewport.width;
+            const scaleY = containerHeight / viewport.height;
+            const scale = Math.min(scaleX, scaleY);
+
+            const scaledViewport = page.getViewport({ scale });
+
+            modalCanvas.width = scaledViewport.width;
+            modalCanvas.height = scaledViewport.height;
+
+            await page.render({
+                canvasContext: modalCtx,
+                viewport: scaledViewport
+            }).promise;
+        }
+
+        // Update controls state
+        function updatePageControls() {
+            const indicator = `${currentPage} / ${totalPages}`;
+            pageIndicator.textContent = indicator;
+            modalPageIndicator.textContent = indicator;
+
+            prevBtn.disabled = currentPage <= 1;
+            nextBtn.disabled = currentPage >= totalPages;
+            modalPrevBtn.disabled = currentPage <= 1;
+            modalNextBtn.disabled = currentPage >= totalPages;
+        }
+
+        // Navigation functions
+        function prevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                renderPage(currentPage);
+            }
+        }
+
+        function nextPage() {
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderPage(currentPage);
+            }
+        }
+
+        // PDF Fullscreen
+        function openFullscreen() {
+            isModalOpen = true;
+            document.getElementById('pdfModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            // Re-render for modal after a short delay for DOM to update
+            setTimeout(() => {
+                renderModalPage();
+            }, 100);
+        }
+
+        function closeFullscreen() {
+            isModalOpen = false;
+            document.getElementById('pdfModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeFullscreen();
+            } else if (e.key === 'ArrowLeft') {
+                prevPage();
+            } else if (e.key === 'ArrowRight') {
+                nextPage();
+            }
+        });
+
+        // Touch swipe support
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        function handleSwipe(element) {
+            element.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+
+            element.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                const diff = touchStartX - touchEndX;
+
+                if (Math.abs(diff) > 50) {
+                    if (diff > 0) {
+                        nextPage();
+                    } else {
+                        prevPage();
+                    }
+                }
+            }, { passive: true });
+        }
+
+        // Enable swipe on both canvases
+        handleSwipe(canvas.parentElement);
+        handleSwipe(document.getElementById('modalCanvasWrapper'));
+
+        // Handle window resize
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                if (pdfDoc) {
+                    renderPage(currentPage);
+                }
+            }, 250);
+        });
+
+        // Initialize PDF
+        loadPDF();
+    </script>
+</body>
+</html>
