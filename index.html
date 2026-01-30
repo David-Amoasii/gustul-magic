@@ -536,6 +536,12 @@
                             </svg>
                             <span data-ro="Deschide" data-ru="Открыть">Deschide</span>
                         </button>
+                        <a href="catalog.pdf" target="_blank" class="fullscreen-btn" style="text-decoration: none;">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                            </svg>
+                            <span data-ro="Descarcă" data-ru="Скачать">Descarcă</span>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -571,6 +577,17 @@
                 <button class="pdf-nav-btn" id="modalNextBtn" onclick="nextPage()">
                     <svg viewBox="0 0 24 24" fill="currentColor">
                         <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                    </svg>
+                </button>
+                <button class="pdf-nav-btn" onclick="zoomOut()" title="Zoom out">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19 13H5v-2h14v2z"/>
+                    </svg>
+                </button>
+                <span class="pdf-page-indicator" id="zoomIndicator">100%</span>
+                <button class="pdf-nav-btn" onclick="zoomIn()" title="Zoom in">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
                     </svg>
                 </button>
             </div>
@@ -612,6 +629,9 @@
         let currentPage = 1;
         let totalPages = 0;
         let isModalOpen = false;
+        let currentZoom = 1;
+        const minZoom = 0.5;
+        const maxZoom = 3;
 
         // Canvas elements
         const canvas = document.getElementById('pdfCanvas');
@@ -667,13 +687,13 @@
             setLanguage(savedLang);
         }
 
-        // Render page to canvas
+        // Render page to canvas with high quality
         async function renderPage(pageNum) {
             if (!pdfDoc) return;
 
             const page = await pdfDoc.getPage(pageNum);
 
-            // Render to main canvas
+            // Render to main canvas with high resolution
             const containerWidth = canvas.parentElement.clientWidth;
             const containerHeight = canvas.parentElement.clientHeight;
             const viewport = page.getViewport({ scale: 1 });
@@ -683,10 +703,16 @@
             const scaleY = containerHeight / viewport.height;
             const scale = Math.min(scaleX, scaleY) * 0.95;
 
-            const scaledViewport = page.getViewport({ scale });
+            // Use higher resolution for crisp text (minimum 2x for readability)
+            const pixelRatio = Math.max(window.devicePixelRatio || 1, 2);
+            const scaledViewport = page.getViewport({ scale: scale * pixelRatio });
 
             canvas.width = scaledViewport.width;
             canvas.height = scaledViewport.height;
+
+            // Scale down visually but keep high resolution
+            canvas.style.width = (scaledViewport.width / pixelRatio) + 'px';
+            canvas.style.height = (scaledViewport.height / pixelRatio) + 'px';
 
             await page.render({
                 canvasContext: ctx,
@@ -701,7 +727,7 @@
             updatePageControls();
         }
 
-        // Render page to modal canvas
+        // Render page to modal canvas with high quality
         async function renderModalPage(page) {
             if (!page) {
                 page = await pdfDoc.getPage(currentPage);
@@ -712,20 +738,50 @@
             const containerHeight = modalWrapper.clientHeight - 40;
             const viewport = page.getViewport({ scale: 1 });
 
-            // Calculate scale for larger view
+            // Calculate scale for larger view with zoom
             const scaleX = containerWidth / viewport.width;
             const scaleY = containerHeight / viewport.height;
-            const scale = Math.min(scaleX, scaleY);
+            const baseScale = Math.min(scaleX, scaleY);
+            const scale = baseScale * currentZoom;
 
-            const scaledViewport = page.getViewport({ scale });
+            // Use higher resolution for crisp text (minimum 2x for readability)
+            const pixelRatio = Math.max(window.devicePixelRatio || 1, 2);
+            const scaledViewport = page.getViewport({ scale: scale * pixelRatio });
 
             modalCanvas.width = scaledViewport.width;
             modalCanvas.height = scaledViewport.height;
+
+            // Scale down visually but keep high resolution
+            modalCanvas.style.width = (scaledViewport.width / pixelRatio) + 'px';
+            modalCanvas.style.height = (scaledViewport.height / pixelRatio) + 'px';
 
             await page.render({
                 canvasContext: modalCtx,
                 viewport: scaledViewport
             }).promise;
+
+            // Update zoom indicator
+            document.getElementById('zoomIndicator').textContent = Math.round(currentZoom * 100) + '%';
+        }
+
+        // Zoom functions
+        function zoomIn() {
+            if (currentZoom < maxZoom) {
+                currentZoom = Math.min(currentZoom + 0.25, maxZoom);
+                renderModalPage();
+            }
+        }
+
+        function zoomOut() {
+            if (currentZoom > minZoom) {
+                currentZoom = Math.max(currentZoom - 0.25, minZoom);
+                renderModalPage();
+            }
+        }
+
+        function resetZoom() {
+            currentZoom = 1;
+            renderModalPage();
         }
 
         // Update controls state
@@ -758,6 +814,7 @@
         // PDF Fullscreen
         function openFullscreen() {
             isModalOpen = true;
+            currentZoom = 1; // Reset zoom when opening
             document.getElementById('pdfModal').classList.add('active');
             document.body.style.overflow = 'hidden';
             // Re-render for modal after a short delay for DOM to update
@@ -780,7 +837,23 @@
                 prevPage();
             } else if (e.key === 'ArrowRight') {
                 nextPage();
+            } else if (isModalOpen && (e.key === '+' || e.key === '=')) {
+                zoomIn();
+            } else if (isModalOpen && e.key === '-') {
+                zoomOut();
+            } else if (isModalOpen && e.key === '0') {
+                resetZoom();
             }
+        });
+
+        // Double-click to zoom in modal
+        document.getElementById('modalCanvasWrapper').addEventListener('dblclick', () => {
+            if (currentZoom < 2) {
+                currentZoom = 2;
+            } else {
+                currentZoom = 1;
+            }
+            renderModalPage();
         });
 
         // Touch swipe support
