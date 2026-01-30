@@ -573,17 +573,6 @@
                         <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
                     </svg>
                 </button>
-                <button class="pdf-nav-btn" onclick="zoomOut()" title="Zoom out">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M19 13H5v-2h14v2z"/>
-                    </svg>
-                </button>
-                <span class="pdf-page-indicator" id="zoomIndicator">100%</span>
-                <button class="pdf-nav-btn" onclick="zoomIn()" title="Zoom in">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
-                    </svg>
-                </button>
             </div>
         </div>
     </div>
@@ -754,8 +743,9 @@
                 viewport: scaledViewport
             }).promise;
 
-            // Update zoom indicator
-            document.getElementById('zoomIndicator').textContent = Math.round(currentZoom * 100) + '%';
+            // Update zoom indicator (if exists)
+            const zoomIndicator = document.getElementById('zoomIndicator');
+            if (zoomIndicator) zoomIndicator.textContent = Math.round(currentZoom * 100) + '%';
         }
 
         // Zoom functions
