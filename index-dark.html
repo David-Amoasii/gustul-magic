@@ -9,22 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <style>
-        :root {
-            --bg-page: #FAFAF8;
-            --bg-page-end: #F0EFF5;
-            --text-primary: #1E2A3A;
-            --text-secondary: #5A6B7F;
-            --accent: #303D5C;
-            --accent-light: #4A5E82;
-            --card-bg: #FFFFFF;
-            --card-shadow: 0 2px 16px rgba(30, 42, 58, 0.06);
-            --card-shadow-hover: 0 8px 32px rgba(30, 42, 58, 0.12);
-            --footer-color: #9BA8B7;
-            --divider: #E2E5EA;
-            --gradient-warm: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
-            --gradient-cool: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
-        }
-
         * {
             margin: 0;
             padding: 0;
@@ -33,48 +17,35 @@
 
         body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            background: linear-gradient(180deg, var(--bg-page) 0%, var(--bg-page-end) 100%);
-            color: var(--text-primary);
+            background: linear-gradient(135deg, #1a2332 0%, #303D5C 50%, #3d4d6e 100%);
+            color: #F5F0E6;
             min-height: 100vh;
             line-height: 1.6;
-            overflow-x: hidden;
             position: relative;
+            overflow-x: hidden;
         }
 
-        /* Decorative background blobs */
-        body::before,
+        /* Декоративный фон */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(245,240,230,0.03) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
         body::after {
             content: '';
             position: fixed;
-            border-radius: 50%;
+            bottom: -50%;
+            left: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(245,240,230,0.02) 0%, transparent 70%);
             pointer-events: none;
-            z-index: 0;
-            filter: blur(80px);
-            opacity: 0.35;
-        }
-
-        body::before {
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(161,140,209,0.4) 0%, transparent 70%);
-            top: -100px;
-            right: -120px;
-            animation: blobFloat 14s ease-in-out infinite;
-        }
-
-        body::after {
-            width: 350px;
-            height: 350px;
-            background: radial-gradient(circle, rgba(253,160,133,0.3) 0%, transparent 70%);
-            bottom: 10%;
-            left: -100px;
-            animation: blobFloat 18s ease-in-out infinite reverse;
-        }
-
-        @keyframes blobFloat {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(30px, -20px) scale(1.05); }
-            66% { transform: translate(-15px, 15px) scale(0.95); }
         }
 
         .container {
@@ -85,75 +56,37 @@
             z-index: 1;
         }
 
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(28px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes shimmer {
-            0% { background-position: -200% center; }
-            100% { background-position: 200% center; }
-        }
-
-        @keyframes gentlePulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-        }
-
-        @keyframes borderGlow {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
-        }
-
-        .anim-1 { animation: fadeInUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both; }
-        .anim-2 { animation: fadeInUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.25s both; }
-        .anim-3 { animation: fadeInUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.4s both; }
-        .anim-4 { animation: fadeInUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.55s both; }
-        .anim-5 { animation: fadeInUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.7s both; }
-        .anim-6 { animation: fadeInUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.85s both; }
-
         /* Language Switcher */
         .lang-switcher {
             display: flex;
             justify-content: flex-end;
-            gap: 4px;
+            gap: 5px;
             margin-bottom: 30px;
-            background: #ECEDF1;
-            border-radius: 28px;
-            padding: 3px;
-            width: fit-content;
-            margin-left: auto;
         }
 
         .lang-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-secondary);
-            padding: 8px 20px;
+            background: rgba(245, 240, 230, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(245, 240, 230, 0.2);
+            color: #F5F0E6;
+            padding: 8px 18px;
             border-radius: 25px;
             cursor: pointer;
             font-size: 13px;
             font-weight: 600;
             letter-spacing: 1px;
-            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-            position: relative;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .lang-btn:hover:not(.active) {
-            color: var(--text-primary);
+        .lang-btn:hover {
+            background: rgba(245, 240, 230, 0.2);
+            transform: translateY(-2px);
         }
 
         .lang-btn.active {
-            background: var(--accent);
-            color: #FFFFFF;
-            box-shadow: 0 4px 14px rgba(48, 61, 92, 0.3);
+            background: linear-gradient(135deg, #F5F0E6 0%, #e8e0d0 100%);
+            color: #303D5C;
+            box-shadow: 0 4px 15px rgba(245, 240, 230, 0.3);
         }
 
         /* Header */
@@ -163,32 +96,37 @@
         }
 
         .logo-wrapper {
-            display: inline-block;
-            margin-bottom: 24px;
             position: relative;
+            display: inline-block;
+            margin-bottom: 25px;
+        }
+
+        .logo-wrapper::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            right: -8px;
+            bottom: -8px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(245,240,230,0.3), rgba(245,240,230,0.05));
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.7; }
         }
 
         .logo {
-            max-width: 220px;
-            width: 100%;
-            height: auto;
-            display: block;
-            transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-            filter: drop-shadow(0 8px 24px rgba(30, 42, 58, 0.1));
-        }
-
-        .logo-wrapper:hover .logo {
-            transform: scale(1.04) translateY(-4px);
-        }
-
-        .header-divider {
-            width: 60px;
-            height: 3px;
-            background: linear-gradient(90deg, var(--accent-light), #a18cd1, var(--accent-light));
-            background-size: 200% auto;
-            margin: 0 auto 18px;
-            border-radius: 2px;
-            animation: shimmer 4s linear infinite;
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #F5F0E6;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
         }
 
         .name {
@@ -196,192 +134,74 @@
             font-size: 2.2rem;
             font-weight: 700;
             margin-bottom: 8px;
-            background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-light) 50%, var(--text-primary) 100%);
-            background-size: 200% auto;
+            background: linear-gradient(135deg, #F5F0E6 0%, #d4cfc0 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
         .position {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            letter-spacing: 3px;
+            font-size: 1rem;
+            opacity: 0.8;
+            letter-spacing: 2px;
             text-transform: uppercase;
             font-weight: 600;
-            position: relative;
-            display: inline-block;
         }
-
-        .position::before,
-        .position::after {
-            content: '';
-            display: inline-block;
-            width: 16px;
-            height: 1px;
-            background: var(--text-secondary);
-            vertical-align: middle;
-            opacity: 0.4;
-        }
-
-        .position::before { margin-right: 10px; }
-        .position::after { margin-left: 10px; }
 
         /* Phone Number Display */
         .phone-display {
-            margin-top: 22px;
-            padding: 14px 28px;
-            background: var(--card-bg);
-            border-radius: 50px;
+            margin-top: 20px;
+            padding: 15px 25px;
+            background: rgba(245, 240, 230, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
             display: inline-block;
-            border: 1px solid transparent;
-            box-shadow:
-                0 2px 8px rgba(30, 42, 58, 0.04),
-                0 1px 2px rgba(30, 42, 58, 0.06);
-            position: relative;
-            transition: all 0.4s ease;
-            background-clip: padding-box;
-        }
-
-        .phone-display::before {
-            content: '';
-            position: absolute;
-            inset: -2px;
-            border-radius: 52px;
-            background: linear-gradient(135deg, rgba(161,140,209,0.3), rgba(253,160,133,0.3));
-            z-index: -1;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
-        .phone-display:hover::before {
-            opacity: 1;
-        }
-
-        .phone-display:hover {
-            box-shadow:
-                0 4px 16px rgba(30, 42, 58, 0.08),
-                0 2px 4px rgba(30, 42, 58, 0.04);
-            transform: translateY(-2px);
+            border: 1px solid rgba(245, 240, 230, 0.15);
         }
 
         .phone-display a {
-            color: var(--text-primary);
+            color: #F5F0E6;
             text-decoration: none;
-            font-size: 1.35rem;
+            font-size: 1.4rem;
             font-weight: 600;
-            letter-spacing: 1.5px;
+            letter-spacing: 1px;
             transition: all 0.3s ease;
         }
 
         .phone-display a:hover {
-            color: var(--accent-light);
+            text-shadow: 0 0 20px rgba(245, 240, 230, 0.5);
         }
 
-        /* Section Card */
-        .section-card {
-            background: var(--card-bg);
-            border-radius: 24px;
-            padding: 32px 28px;
-            box-shadow:
-                0 1px 3px rgba(30, 42, 58, 0.04),
-                0 4px 16px rgba(30, 42, 58, 0.06);
-            margin-bottom: 28px;
-            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-            position: relative;
-            border: 1px solid rgba(226, 229, 234, 0.6);
-        }
-
-        .section-card::before {
-            content: '';
-            position: absolute;
-            inset: -1px;
-            border-radius: 25px;
-            background: linear-gradient(135deg,
-                rgba(161,140,209,0.2) 0%,
-                transparent 40%,
-                transparent 60%,
-                rgba(253,160,133,0.2) 100%);
-            z-index: -1;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
-        .section-card:hover {
-            box-shadow:
-                0 4px 12px rgba(30, 42, 58, 0.06),
-                0 12px 40px rgba(30, 42, 58, 0.1);
-            transform: translateY(-4px);
-            border-color: transparent;
-        }
-
-        .section-card:hover::before {
-            opacity: 1;
+        /* Sections */
+        .section {
+            margin-bottom: 35px;
         }
 
         .section-title {
             font-family: 'Montserrat', sans-serif;
-            font-size: 1.1rem;
-            margin-bottom: 22px;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
             text-align: center;
-            letter-spacing: 4px;
+            letter-spacing: 3px;
             text-transform: uppercase;
-            color: var(--text-secondary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 14px;
-        }
-
-        .section-title::before,
-        .section-title::after {
-            content: '';
-            flex: 1;
-            max-width: 50px;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--divider));
-        }
-
-        .section-title::after {
-            background: linear-gradient(90deg, var(--divider), transparent);
+            opacity: 0.9;
         }
 
         /* Contact Buttons */
         .contact-buttons {
             display: flex;
             justify-content: center;
-            gap: 24px;
+            gap: 15px;
             flex-wrap: wrap;
-        }
-
-        .contact-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .contact-label {
-            font-size: 0.7rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            color: var(--text-secondary);
-            opacity: 0.7;
-            transition: opacity 0.3s ease;
-        }
-
-        .contact-item:hover .contact-label {
-            opacity: 1;
         }
 
         .contact-btn {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 72px;
-            height: 72px;
-            border-radius: 22px;
+            width: 70px;
+            height: 70px;
+            border-radius: 20px;
             text-decoration: none;
             color: #fff;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -396,35 +216,13 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, transparent 50%);
+            background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%);
             pointer-events: none;
-        }
-
-        .contact-btn::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.5s ease, height 0.5s ease;
-            pointer-events: none;
-        }
-
-        .contact-btn:hover::after {
-            width: 120px;
-            height: 120px;
         }
 
         .contact-btn:hover {
-            transform: translateY(-6px) scale(1.08);
-        }
-
-        .contact-btn:active {
-            transform: translateY(-2px) scale(0.98);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
         }
 
         .contact-btn svg {
@@ -432,53 +230,30 @@
             height: 32px;
             position: relative;
             z-index: 1;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
         }
 
         .contact-btn.whatsapp {
             background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
-            box-shadow:
-                0 6px 20px rgba(37, 211, 102, 0.35),
-                inset 0 -2px 6px rgba(0,0,0,0.1);
-        }
-
-        .contact-btn.whatsapp:hover {
-            box-shadow:
-                0 10px 35px rgba(37, 211, 102, 0.5),
-                inset 0 -2px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 20px rgba(37, 211, 102, 0.3);
         }
 
         .contact-btn.telegram {
             background: linear-gradient(135deg, #2AABEE 0%, #0088cc 100%);
-            box-shadow:
-                0 6px 20px rgba(0, 136, 204, 0.35),
-                inset 0 -2px 6px rgba(0,0,0,0.1);
-        }
-
-        .contact-btn.telegram:hover {
-            box-shadow:
-                0 10px 35px rgba(0, 136, 204, 0.5),
-                inset 0 -2px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 20px rgba(0, 136, 204, 0.3);
         }
 
         .contact-btn.viber {
             background: linear-gradient(135deg, #9b7dff 0%, #7360f2 100%);
-            box-shadow:
-                0 6px 20px rgba(115, 96, 242, 0.35),
-                inset 0 -2px 6px rgba(0,0,0,0.1);
-        }
-
-        .contact-btn.viber:hover {
-            box-shadow:
-                0 10px 35px rgba(115, 96, 242, 0.5),
-                inset 0 -2px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 20px rgba(115, 96, 242, 0.3);
         }
 
         /* Catalog */
         .catalog-wrapper {
-            border-radius: 16px;
-            overflow: hidden;
-            border: 1px solid rgba(226, 229, 234, 0.8);
+            background: rgba(245, 240, 230, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 15px;
+            border: 1px solid rgba(245, 240, 230, 0.1);
         }
 
         .pdf-container {
@@ -495,24 +270,14 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #f8f8fa 0%, #f0f0f4 100%);
+            background: #f5f5f5;
             cursor: pointer;
-            transition: background 0.3s ease;
-        }
-
-        .pdf-canvas-wrapper:hover {
-            background: linear-gradient(135deg, #f2f2f6 0%, #eaeaf0 100%);
         }
 
         .pdf-canvas {
             max-width: 100%;
             max-height: 100%;
             display: block;
-            transition: transform 0.3s ease;
-        }
-
-        .pdf-canvas-wrapper:hover .pdf-canvas {
-            transform: scale(1.01);
         }
 
         .pdf-controls {
@@ -520,14 +285,15 @@
             align-items: center;
             justify-content: center;
             gap: 15px;
-            padding: 14px;
-            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            padding: 12px;
+            background: rgba(48, 61, 92, 0.95);
+            backdrop-filter: blur(10px);
         }
 
         .pdf-nav-btn {
-            background: rgba(255, 255, 255, 0.12);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #FFFFFF;
+            background: rgba(245, 240, 230, 0.15);
+            border: 1px solid rgba(245, 240, 230, 0.25);
+            color: #F5F0E6;
             width: 44px;
             height: 44px;
             border-radius: 50%;
@@ -537,22 +303,16 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-            backdrop-filter: blur(4px);
+            transition: all 0.3s ease;
         }
 
         .pdf-nav-btn:hover:not(:disabled) {
-            background: rgba(255, 255, 255, 0.25);
-            transform: scale(1.12);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
-
-        .pdf-nav-btn:active:not(:disabled) {
-            transform: scale(0.95);
+            background: rgba(245, 240, 230, 0.25);
+            transform: scale(1.1);
         }
 
         .pdf-nav-btn:disabled {
-            opacity: 0.35;
+            opacity: 0.4;
             cursor: not-allowed;
         }
 
@@ -562,19 +322,19 @@
         }
 
         .pdf-page-indicator {
-            color: rgba(255, 255, 255, 0.9);
+            color: #F5F0E6;
             font-size: 14px;
             font-weight: 600;
             min-width: 70px;
             text-align: center;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
         }
 
         .fullscreen-btn {
-            background: rgba(255, 255, 255, 0.12);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #FFFFFF;
-            padding: 10px 20px;
+            background: rgba(245, 240, 230, 0.15);
+            border: 1px solid rgba(245, 240, 230, 0.25);
+            color: #F5F0E6;
+            padding: 10px 18px;
             border-radius: 25px;
             cursor: pointer;
             font-size: 13px;
@@ -582,14 +342,12 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-            backdrop-filter: blur(4px);
+            transition: all 0.3s ease;
         }
 
         .fullscreen-btn:hover {
-            background: rgba(255, 255, 255, 0.25);
-            transform: scale(1.06);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            background: rgba(245, 240, 230, 0.25);
+            transform: scale(1.05);
         }
 
         .fullscreen-btn svg {
@@ -605,8 +363,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(10, 15, 25, 0.92);
-            backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.95);
             z-index: 1000;
             padding: 20px;
         }
@@ -614,7 +371,6 @@
         .pdf-modal.active {
             display: flex;
             flex-direction: column;
-            animation: fadeInUp 0.3s ease-out;
         }
 
         .modal-header {
@@ -624,10 +380,10 @@
         }
 
         .close-btn {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            color: #FFFFFF;
-            padding: 10px 22px;
+            background: rgba(245, 240, 230, 0.1);
+            border: 1px solid rgba(245, 240, 230, 0.2);
+            color: #F5F0E6;
+            padding: 10px 20px;
             border-radius: 25px;
             cursor: pointer;
             font-size: 14px;
@@ -636,12 +392,10 @@
             align-items: center;
             gap: 8px;
             transition: all 0.3s ease;
-            backdrop-filter: blur(4px);
         }
 
         .close-btn:hover {
-            background: rgba(255, 255, 255, 0.18);
-            transform: scale(1.04);
+            background: rgba(245, 240, 230, 0.2);
         }
 
         .close-btn svg {
@@ -651,12 +405,11 @@
 
         .modal-pdf {
             flex: 1;
-            border-radius: 16px;
+            border-radius: 10px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            background: var(--accent);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            background: #303D5C;
         }
 
         .modal-canvas-wrapper {
@@ -665,17 +418,14 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #F2F2F6 0%, #E8E8EE 100%);
+            background: #2a3548;
             padding: 20px;
         }
 
         .modal-canvas {
             max-width: 100%;
             max-height: 100%;
-            box-shadow:
-                0 4px 12px rgba(0, 0, 0, 0.08),
-                0 16px 48px rgba(0, 0, 0, 0.15);
-            border-radius: 4px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
         }
 
         .modal-controls {
@@ -683,27 +433,18 @@
             align-items: center;
             justify-content: center;
             gap: 20px;
-            padding: 16px;
-            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            padding: 15px;
+            background: rgba(48, 61, 92, 0.98);
+            backdrop-filter: blur(10px);
         }
 
         /* Footer */
         .footer {
             text-align: center;
             padding: 30px 20px;
-            color: var(--footer-color);
+            opacity: 0.5;
             font-size: 0.85rem;
             letter-spacing: 2px;
-            position: relative;
-        }
-
-        .footer::before {
-            content: '';
-            display: block;
-            width: 40px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--divider), transparent);
-            margin: 0 auto 20px;
         }
 
         /* Responsive */
@@ -719,34 +460,10 @@
             .contact-btn {
                 width: 65px;
                 height: 65px;
-                border-radius: 18px;
-            }
-
-            .section-card {
-                padding: 24px 20px;
-                border-radius: 20px;
             }
 
             .pdf-canvas-wrapper {
                 aspect-ratio: 210 / 297;
-            }
-
-            body::before {
-                width: 250px;
-                height: 250px;
-            }
-
-            body::after {
-                width: 200px;
-                height: 200px;
-            }
-        }
-
-        /* Reduced motion */
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                transition-duration: 0.01ms !important;
             }
         }
     </style>
@@ -761,50 +478,40 @@
 
         <!-- Header -->
         <header class="header">
-            <div class="logo-wrapper anim-1">
-                <img src="Vector.png" alt="Gustul Magic" class="logo">
+            <div class="logo-wrapper">
+                <img src="logo.jpg" alt="Gustul Magic" class="logo">
             </div>
-            <div class="header-divider anim-2"></div>
-            <h1 class="name anim-2">Denis Amoaşii</h1>
-            <p class="position anim-3" data-ro="Agent de vânzări" data-ru="Агент по продажам">Agent de vânzări</p>
-            <div class="phone-display anim-4">
+            <h1 class="name">Denis Amoaşii</h1>
+            <p class="position" data-ro="Agent de vânzări" data-ru="Агент по продажам">Agent de vânzări</p>
+            <div class="phone-display">
                 <a href="tel:+37367353885">+373 67 353 885</a>
             </div>
         </header>
 
         <!-- Contacts -->
-        <div class="section-card anim-5">
+        <section class="section">
             <h2 class="section-title" data-ro="Contacte" data-ru="Контакты">Contacte</h2>
             <div class="contact-buttons">
-                <div class="contact-item">
-                    <a href="https://wa.me/37367353885" class="contact-btn whatsapp" target="_blank" title="WhatsApp">
-                        <svg viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                        </svg>
-                    </a>
-                    <span class="contact-label">WhatsApp</span>
-                </div>
-                <div class="contact-item">
-                    <a href="https://t.me/+37367353885" class="contact-btn telegram" target="_blank" title="Telegram">
-                        <svg viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
-                        </svg>
-                    </a>
-                    <span class="contact-label">Telegram</span>
-                </div>
-                <div class="contact-item">
-                    <a href="viber://chat?number=+37367353885" class="contact-btn viber" title="Viber">
-                        <svg viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M11.398.002C9.473.028 5.331.344 3.014 2.467 1.294 4.182.518 6.77.434 9.983c-.084 3.213-.19 9.24 5.655 10.914l.004.003-.003 2.51s-.04.997.63 1.202c.79.244 1.228-.521 1.945-1.315.393-.434.928-1.074 1.335-1.566 3.674.323 6.503-.396 6.826-.497.746-.234 4.967-.784 5.656-6.39.712-5.79-.333-9.447-2.162-11.103l-.002-.001c-.55-.546-2.727-2.05-7.558-2.16 0 0-.374-.02-.962-.014zm.09 1.773c.478-.004.79.013.79.013 4.012.092 5.87 1.267 6.324 1.707l.002.001c1.469 1.332 2.258 4.59 1.655 9.506-.562 4.553-3.945 4.89-4.555 5.082-.267.083-2.648.673-5.64.478 0 0-2.236 2.7-2.934 3.402-.109.11-.24.147-.326.127-.121-.028-.155-.147-.153-.326l.02-3.688-.001-.004c-4.892-1.4-4.604-6.657-4.536-9.313.069-2.658.676-4.804 2.103-6.217 1.95-1.774 5.437-2.16 7.251-2.168zm.18 2.403c-.157 0-.286.128-.283.287 0 .158.128.285.286.285 1.086.006 2.108.425 2.878 1.18a4.066 4.066 0 0 1 1.211 2.848c0 .158.127.287.284.287h.004a.287.287 0 0 0 .283-.29c-.004-1.188-.468-2.305-1.308-3.144-.852-.854-1.985-1.33-3.191-1.338a.292.292 0 0 0-.164.085zm-3.242.386a.66.66 0 0 0-.366.096c-.312.191-.612.404-.893.64a2.399 2.399 0 0 0-.472.512c-.169.25-.25.531-.25.813.006.242.06.483.162.708.224.5.522.964.883 1.381.093.113.188.225.287.334l.005.006.006.005c.281.312.584.605.91.874l.006.005c.699.58 1.476 1.049 2.32 1.41l.026.01a9.62 9.62 0 0 0 1.064.393c.265.08.536.13.809.149h.072c.216 0 .469-.057.666-.194a2.077 2.077 0 0 0 .515-.478c.139-.2.273-.41.389-.63.125-.237.13-.484.01-.673-.198-.31-.473-.56-.76-.803l-.101-.08c-.2-.157-.4-.312-.61-.45a.873.873 0 0 0-.503-.152.88.88 0 0 0-.584.234c-.093.085-.18.176-.264.27l-.147.167c-.087.1-.172.14-.246.14a.456.456 0 0 1-.166-.039 4.543 4.543 0 0 1-.652-.372 6.009 6.009 0 0 1-1.244-1.076 4.987 4.987 0 0 1-.467-.63 1.348 1.348 0 0 1-.08-.15.276.276 0 0 1 .035-.28l.005-.005c.103-.12.212-.234.316-.354l.094-.106c.18-.205.263-.424.244-.649a.869.869 0 0 0-.308-.554c-.096-.11-.249-.269-.409-.434l-.206-.213c-.198-.207-.4-.418-.609-.617a.878.878 0 0 0-.596-.243zm3.846.378c-.16 0-.29.126-.29.283 0 .158.127.286.285.29.562.004 1.09.226 1.487.624.397.398.62.924.625 1.483.003.157.131.283.287.283h.004a.286.286 0 0 0 .283-.29 2.677 2.677 0 0 0-.79-1.876 2.678 2.678 0 0 0-1.891-.782v-.015zm.487 1.03c-.155 0-.283.126-.284.281-.002.158.124.287.282.29.275.004.502.113.679.294.177.182.28.406.289.69v.003c.006.158.132.283.288.282a.286.286 0 0 0 .282-.295 1.71 1.71 0 0 0-.482-1.13 1.657 1.657 0 0 0-1.054-.5v-.015z"/>
-                        </svg>
-                    </a>
-                    <span class="contact-label">Viber</span>
-                </div>
+                <a href="https://wa.me/37367353885" class="contact-btn whatsapp" target="_blank" title="WhatsApp">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                    </svg>
+                </a>
+                <a href="https://t.me/+37367353885" class="contact-btn telegram" target="_blank" title="Telegram">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                    </svg>
+                </a>
+                <a href="viber://chat?number=+37367353885" class="contact-btn viber" title="Viber">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M11.398.002C9.473.028 5.331.344 3.014 2.467 1.294 4.182.518 6.77.434 9.983c-.084 3.213-.19 9.24 5.655 10.914l.004.003-.003 2.51s-.04.997.63 1.202c.79.244 1.228-.521 1.945-1.315.393-.434.928-1.074 1.335-1.566 3.674.323 6.503-.396 6.826-.497.746-.234 4.967-.784 5.656-6.39.712-5.79-.333-9.447-2.162-11.103l-.002-.001c-.55-.546-2.727-2.05-7.558-2.16 0 0-.374-.02-.962-.014zm.09 1.773c.478-.004.79.013.79.013 4.012.092 5.87 1.267 6.324 1.707l.002.001c1.469 1.332 2.258 4.59 1.655 9.506-.562 4.553-3.945 4.89-4.555 5.082-.267.083-2.648.673-5.64.478 0 0-2.236 2.7-2.934 3.402-.109.11-.24.147-.326.127-.121-.028-.155-.147-.153-.326l.02-3.688-.001-.004c-4.892-1.4-4.604-6.657-4.536-9.313.069-2.658.676-4.804 2.103-6.217 1.95-1.774 5.437-2.16 7.251-2.168zm.18 2.403c-.157 0-.286.128-.283.287 0 .158.128.285.286.285 1.086.006 2.108.425 2.878 1.18a4.066 4.066 0 0 1 1.211 2.848c0 .158.127.287.284.287h.004a.287.287 0 0 0 .283-.29c-.004-1.188-.468-2.305-1.308-3.144-.852-.854-1.985-1.33-3.191-1.338a.292.292 0 0 0-.164.085zm-3.242.386a.66.66 0 0 0-.366.096c-.312.191-.612.404-.893.64a2.399 2.399 0 0 0-.472.512c-.169.25-.25.531-.25.813.006.242.06.483.162.708.224.5.522.964.883 1.381.093.113.188.225.287.334l.005.006.006.005c.281.312.584.605.91.874l.006.005c.699.58 1.476 1.049 2.32 1.41l.026.01a9.62 9.62 0 0 0 1.064.393c.265.08.536.13.809.149h.072c.216 0 .469-.057.666-.194a2.077 2.077 0 0 0 .515-.478c.139-.2.273-.41.389-.63.125-.237.13-.484.01-.673-.198-.31-.473-.56-.76-.803l-.101-.08c-.2-.157-.4-.312-.61-.45a.873.873 0 0 0-.503-.152.88.88 0 0 0-.584.234c-.093.085-.18.176-.264.27l-.147.167c-.087.1-.172.14-.246.14a.456.456 0 0 1-.166-.039 4.543 4.543 0 0 1-.652-.372 6.009 6.009 0 0 1-1.244-1.076 4.987 4.987 0 0 1-.467-.63 1.348 1.348 0 0 1-.08-.15.276.276 0 0 1 .035-.28l.005-.005c.103-.12.212-.234.316-.354l.094-.106c.18-.205.263-.424.244-.649a.869.869 0 0 0-.308-.554c-.096-.11-.249-.269-.409-.434l-.206-.213c-.198-.207-.4-.418-.609-.617a.878.878 0 0 0-.596-.243zm3.846.378c-.16 0-.29.126-.29.283 0 .158.127.286.285.29.562.004 1.09.226 1.487.624.397.398.62.924.625 1.483.003.157.131.283.287.283h.004a.286.286 0 0 0 .283-.29 2.677 2.677 0 0 0-.79-1.876 2.678 2.678 0 0 0-1.891-.782v-.015zm.487 1.03c-.155 0-.283.126-.284.281-.002.158.124.287.282.29.275.004.502.113.679.294.177.182.28.406.289.69v.003c.006.158.132.283.288.282a.286.286 0 0 0 .282-.295 1.71 1.71 0 0 0-.482-1.13 1.657 1.657 0 0 0-1.054-.5v-.015z"/>
+                    </svg>
+                </a>
             </div>
-        </div>
+        </section>
 
         <!-- Catalog -->
-        <div class="section-card anim-6">
+        <section class="section">
             <h2 class="section-title" data-ro="Catalog" data-ru="Каталог">Catalog</h2>
             <div class="catalog-wrapper">
                 <div class="pdf-container">
@@ -832,7 +539,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
 
         <!-- Footer -->
         <footer class="footer">
